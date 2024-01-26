@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="en">
+    <head>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/item-series.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+					
+        <style>
+ html, body, #map {
+            width: 95%;
+            height: 100%;
+            padding: 0;
+            margin: 0 auto;
+        }
+				 .color-palette {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            background: white;
+            padding: 0px;
+			z-index: 1000;
+        }
+
+        .color {
+            width: 20px;
+            height: 20px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div style="align:center;" id="map">
+		<div id="colorCalculator" class="calculator"></div>
+		<div class="button-container">
+	<button id="togglePaletteButton">팔레트 ON/OFF</button>
+        </div>
+		<div id="colorPalette" class="color-palette">
+    <div class="color-item">
+        <div class="color" style="background-color: #D7003A;"></div>
+        <div class="color-text">자민당</div>
+        </div>
+		<div class="color-item">
+		        <div class="color" style="background-color: #f95580;"></div>
+        <div class="color-text">공명당</div>
+        </div>
+		<div class="color-item">
+		        <div class="color" style="background-color: #9ec828;"></div>
+        <div class="color-text">유신회</div>
+        </div>
+						<div class="color-item">
+			 <div class="color" style="background-color: #c9bf9b;"></div>
+        <div class="color-text">기타</div>
+        </div>
+		<div class="color-item">
+			 <div class="color" style="background-color: #808080;"></div>
+        <div class="color-text">무소속</div>
+        </div>
+		<div class="color-item">
+			 <div class="color" style="background-color: #9593ff;"></div>
+        <div class="color-text">교육당</div>
+        </div>
+		<div class="color-item">
+		        <div class="color" style="background-color: #ffc000;"></div>
+        <div class="color-text">국민당</div>
+        </div>
+		<div class="color-item">
+		        <div class="color" style="background-color: #ED008C;"></div>
+        <div class="color-text">레이와</div>
+        </div>
+		<div class="color-item">
+			        <div class="color" style="background-color: #01a8ec;"></div>
+        <div class="color-text">사민당</div>
+        </div>
+		<div class="color-item">
+			        <div class="color" style="background-color: #782B90;"></div>
+        <div class="color-text">공산당</div>
+        </div>
+		<div class="color-item">
+        <div class="color" style="background-color: #00469C;"></div>
+		<div class="color-text">입민당</div>
+		</div>
+		</div>
+		</div>
+		
+		<div>
+<div>
+    <h2>지역구 의석(정원 289석)</h2>
+    <label for="자민당">자민당: </label>
+    <input type="number" id="party1" value="0"><br>
+    <label for="공명당">공명당: </label>
+    <input type="number" id="party2" value="0"><br>
+    <label for="유신회">유신회: </label>
+    <input type="number" id="party3" value="0"><br>
+    <label for="기타">기타: </label>
+    <input type="number" id="party4" value="0"><br>
+    <label for="무소속">무소속: </label>
+    <input type="number" id="party5" value="0"><br>
+	    <label for="무소속">교육당: </label>
+    <input type="number" id="party6" value="0"><br>
+    <label for="국민당">국민당: </label>
+    <input type="number" id="party7" value="0"><br>
+    <label for="레이와">레이와: </label>
+    <input type="number" id="party8" value="0"><br>
+    <label for="사민당">사민당: </label>
+    <input type="number" id="party9" value="0"><br>
+	 <label for="공산당">공산당: </label>
+    <input type="number" id="party10" value="0"><br>
+		 <label for="입민당">입민당: </label>
+    <input type="number" id="party11" value="0"><br>
+
+	
+    <h2>비례대표 의석(정원 176석)</h2>
+    <label for="자민당">자민당: </label>
+    <input type="number" id="aparty1" value="0"><br>
+    <label for="공명당">공명당: </label>
+    <input type="number" id="aparty2" value="0"><br>
+    <label for="유신회">유신회: </label>
+    <input type="number" id="aparty3" value="0"><br>
+    <label for="기타">기타: </label>
+    <input type="number" id="aparty4" value="0"><br>
+	    <label for="기타">교육당: </label>
+    <input type="number" id="aparty6" value="0"><br>
+    <label for="국민당">국민당: </label>
+    <input type="number" id="aparty7" value="0"><br>
+    <label for="레이와">레이와: </label>
+    <input type="number" id="aparty8" value="0"><br>
+    <label for="사민당">사민당: </label>
+    <input type="number" id="aparty9" value="0"><br>
+	 <label for="공산당">공산당: </label>
+    <input type="number" id="aparty10" value="0"><br>
+		 <label for="입민당">입민당: </label>
+    <input type="number" id="aparty11" value="0"><br>
+	
+	<br><br>
+    <button onclick="updateChart()">중의원 만들기</button><br>
+    </div>
+	
+	<hr>
+		<div id="container" style="width:100%; align:center; height:400px;"></div>
+
+
+
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="data/simple_japan2_1.js"></script>
+        <script src="data/dokdo_urittang_2.js"></script>
+        <script>
+        var map = L.map('map', {
+            doubleClickZoom: false, zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[33.93274534175882,134.95771629014007],[40.520946037837746,145.20044052755543]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        map.createPane('pane_GoogleMaps_0');
+        map.getPane('pane_GoogleMaps_0').style.zIndex = 400;
+        var layer_GoogleMaps_0 = L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+            pane: 'pane_GoogleMaps_0',
+            opacity: 1.0,
+            attribution: '',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 19
+        });
+        layer_GoogleMaps_0;
+        map.addLayer(layer_GoogleMaps_0);
+        function pop_simple_japan2_1(feature, layer) {
+            var popupContent = '<table>\
+                    <tr style="font-size: 10pt; font-weight: bold; font-family: 맑은 고딕;">\
+                        <td colspan="2">' + (feature.properties['KOR'] !== null ? autolinker.link(feature.properties['KOR'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_simple_japan2_1_0() {
+            return {
+                pane: 'pane_simple_japan2_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0, 
+                fill: true,
+                fillOpacity: 0.8,
+                fillColor: 'rgba(255,255,255,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_simple_japan2_1');
+        map.getPane('pane_simple_japan2_1').style.zIndex = 401;
+        map.getPane('pane_simple_japan2_1').style['mix-blend-mode'] = 'normal';
+        var layer_simple_japan2_1 = new L.geoJson(json_simple_japan2_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_simple_japan2_1',
+            layerName: 'layer_simple_japan2_1',
+            pane: 'pane_simple_japan2_1',
+            onEachFeature: pop_simple_japan2_1,
+            style: style_simple_japan2_1_0,
+        });
+        bounds_group.addLayer(layer_simple_japan2_1);
+        map.addLayer(layer_simple_japan2_1);
+        function pop_dokdo_urittang_2(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['OBJECTID'] !== null ? autolinker.link(feature.properties['OBJECTID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">동해</th>\
+                        <td>' + (feature.properties['동해'] !== null ? autolinker.link(feature.properties['동해'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_dokdo_urittang_2_0() {
+            return {
+                pane: 'pane_dokdo_urittang_2',
+                opacity: 1,
+                color: 'rgba(126,214,234,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(126,214,234,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_dokdo_urittang_2');
+        map.getPane('pane_dokdo_urittang_2').style.zIndex = 402;
+        map.getPane('pane_dokdo_urittang_2').style['mix-blend-mode'] = 'normal';
+        var layer_dokdo_urittang_2 = new L.geoJson(json_dokdo_urittang_2, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_dokdo_urittang_2',
+            layerName: 'layer_dokdo_urittang_2',
+            pane: 'pane_dokdo_urittang_2',
+            onEachFeature: pop_dokdo_urittang_2,
+            style: style_dokdo_urittang_2_0,
+        });
+        bounds_group.addLayer(layer_dokdo_urittang_2);
+        map.addLayer(layer_dokdo_urittang_2);
+        setBounds();
+		
+		 var selectedColor = null;
+
+        // Add event listeners to the color palette
+        var colorElements = document.querySelectorAll('.color');
+        colorElements.forEach(function (colorElement) {
+            colorElement.addEventListener('click', function () {
+                selectedColor = colorElement.style.backgroundColor;
+            });
+        });
+
+        // Add event listener to the GeoJSON layer
+        layer_simple_japan2_1.eachLayer(function (layer) {
+            layer.on('click', function () {
+                if (selectedColor) {
+                    layer.setStyle({ fillColor: selectedColor });
+                }
+});
+        });
+		
+		
+		var colorCounts = {};
+
+var colorLabels = {
+'rgba(255,255,255,1.0)' : '잔여 의석',
+'rgb(215, 0, 58)' : '자민당',
+'rgb(249, 85, 128)' : '공명당',
+'rgb(158, 200, 40)' : '유신회',
+'rgb(201, 191, 155)' : '기타',
+'rgb(128, 128, 128)' : '무소속',
+'rgb(149, 147, 255)' : '교육당',
+'rgb(255, 192, 0)' : '국민당',
+'rgb(237, 0, 140)' : '레이와',
+'rgb(1, 168, 236)' : '사민당',
+'rgb(120, 43, 144)' : '공산당',
+'rgb(0, 70, 156)' : '입민당',
+    // Add labels for other RGB color codes as needed
+};
+
+
+// Function to update the color counters
+function updateColorCounters() {
+    // Clear the previous content of the calculator
+    var calculator = document.getElementById('colorCalculator');
+    calculator.innerHTML = '';
+
+    // Initialize a variable to store the counted layers
+    var countedLayers = [];
+
+    // Loop through each feature in your GeoJSON
+    layer_simple_japan2_1.eachLayer(function (layer) {
+        // Check if the layer has a fillColor
+        if (layer.options.fillColor) {
+            // Get the RGB color as a string
+            var rgbColor = layer.options.fillColor;
+
+            // Use the colorLabels mapping to display the label
+            var label = colorLabels[rgbColor] || rgbColor; // Use the label or the RGB color if not found
+
+            // Update the colorCounts object
+            colorCounts[label] = (colorCounts[label] || 0) + 1;
+
+            // Log the details of the counted layer for debugging
+            countedLayers.push({
+                label: label,
+                rgbColor: rgbColor,
+                layer: layer
+            });
+        }
+    });
+	
+	// Get references to the button and the color palette
+var toggleButton = document.getElementById('togglePaletteButton');
+var colorPalette = document.getElementById('colorPalette');
+
+// Add a click event listener to the button
+toggleButton.addEventListener('click', function () {
+    // Toggle the 'hidden' class to show/hide the color palette
+    colorPalette.classList.toggle('hidden');
+});
+
+
+    // Display the color counts in the calculator
+    for (var color in colorCounts) {
+        var calculatorContent = `<p>${color}: ${colorCounts[color]}</p>`;
+        calculator.innerHTML += calculatorContent;
+    }
+
+    // Log the details of the counted layers for debugging
+    console.log('Counted Layers:', countedLayers);
+}
+
+
+// Add an event listener to update the color counters when a color is selected
+var colorElements = document.querySelectorAll('.color');
+colorElements.forEach(function (colorElement) {
+    colorElement.addEventListener('click', function () {
+        // Reset the color counts when selecting a new color
+        colorCounts = {};
+
+        selectedColor = colorElement.style.backgroundColor;
+        // Update the color counters when a color is selected
+        updateColorCounters();
+    });
+});
+
+updateColorCounters();
+
+		
+        </script>
+		
+				<script>
+  function toggleContent(contentId) {
+    var content = document.getElementById(contentId);
+    if (content.style.display === "none") {
+      content.style.display = "block";
+    } else {
+      content.style.display = "none";
+    }
+  }
+</script>
+
+		
+				<script>
+function updateChart() {
+        const party1Seats = parseInt(document.getElementById('party1').value) + parseInt(document.getElementById('aparty1').value);
+        const party2Seats = parseInt(document.getElementById('party2').value) + parseInt(document.getElementById('aparty2').value);
+        const party3Seats = parseInt(document.getElementById('party3').value) + parseInt(document.getElementById('aparty3').value);
+		const party4Seats = parseInt(document.getElementById('party4').value) + parseInt(document.getElementById('aparty4').value);
+        const party5Seats = parseInt(document.getElementById('party5').value);
+        const party6Seats = parseInt(document.getElementById('party6').value) + parseInt(document.getElementById('aparty6').value);
+        const party7Seats = parseInt(document.getElementById('party7').value) + parseInt(document.getElementById('aparty7').value);
+		const party8Seats = parseInt(document.getElementById('party8').value) + parseInt(document.getElementById('aparty8').value);
+		const party9Seats = parseInt(document.getElementById('party9').value) + parseInt(document.getElementById('aparty9').value);
+		const party10Seats = parseInt(document.getElementById('party10').value) + parseInt(document.getElementById('aparty10').value);
+		const party11Seats = parseInt(document.getElementById('party11').value) + parseInt(document.getElementById('aparty11').value);
+		
+
+		const aparty1Seats = parseInt(document.getElementById('aparty1').value);
+        const aparty2Seats = parseInt(document.getElementById('aparty2').value);
+        const aparty3Seats = parseInt(document.getElementById('aparty3').value);
+        const aparty4Seats = parseInt(document.getElementById('aparty4').value);
+        const aparty6Seats = parseInt(document.getElementById('aparty6').value);
+        const aparty7Seats = parseInt(document.getElementById('aparty7').value);
+        const aparty8Seats = parseInt(document.getElementById('aparty8').value);
+        const aparty9Seats = parseInt(document.getElementById('aparty9').value);
+		const aparty10Seats = parseInt(document.getElementById('aparty10').value);
+		const aparty11Seats = parseInt(document.getElementById('aparty11').value);
+		
+		const atotalSeats = aparty1Seats + aparty2Seats + aparty3Seats + aparty4Seats + aparty6Seats + aparty7Seats + aparty8Seats + aparty9Seats + aparty10Seats + aparty11Seats;
+console.log('Total Seats:', atotalSeats);
+
+if (atotalSeats > 176) {
+    const reduceBy = atotalSeats - 176;
+    alert(`비례대표에서 176석을 넘어갔어요. ${reduceBy}석만큼 줄여주세요!`);
+    return;
+}
+
+if (atotalSeats < 176) {
+    const reduceBy = 176 - atotalSeats;
+    alert(`비례대표에서 176석보다 모자라요. ${reduceBy}석만큼 더해주세요!`);
+    return;
+	
+	}
+		
+    Highcharts.chart('container', {
+        chart: {
+            type: 'item'
+        },
+        title: {
+            text: '50대 중의원'
+        },
+        legend: {
+            labelFormat: '{name} <span style="opacity: 0.4">{y}</span>'
+        },
+        series: [{
+            name: '의석',
+            keys: ['name', 'y', 'color', 'label'],
+            data: [
+				        ['자민당', party1Seats, '#D7003A', '자민당'],
+                        ['공명당', party2Seats, '#f95580', '공명당'],
+                        ['유신회', party3Seats, '#9ec828', '유신회'],
+                        ['기타', party4Seats, '#c9bf9b', '기타'],
+                        ['무소속', party5Seats, '#808080', '무소속'],
+						['교육당', party6Seats, '#9593ff', '교육당'],
+                        ['국민당', party7Seats, '#ffc000', '국민당'],
+						['레이와', party8Seats, '#ED008C', '레이와'],
+						['사민당', party9Seats, '#01a8ec', '사민당'],
+						['공산당', party10Seats, '#782B90', '공산당'],
+						['입민당', party11Seats, '#00469C', '입민당']
+            ],
+            dataLabels: {
+                enabled: false,
+                format: '{point.label}'
+            },
+            // Circular options
+            center: ['50%', '88%'],
+            size: '170%',
+            startAngle: -100,
+            endAngle: 100
+        }]
+    });
+	 }
+</script>
+
+    </body>
+</html>
